@@ -18,10 +18,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Connexion à la base de données MySQL
 const dbConfig = {
-    host: "localhost",
-    user: "root",
-    password: "!@MYSQL_it.1999",
-    database: "gestion_rh",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 };
 
 let connection;
@@ -117,6 +117,19 @@ app.post("/api/departements", async (req, res) => {
 app.get("/api/departements", async (req, res) => {
     try {
         const [rows] = await connection.query("SELECT * FROM departements");
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get("/api/departements/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await connection.query(
+            "SELECT * FROM departements WHERE id = ?",
+            [id]
+        );
         res.json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
