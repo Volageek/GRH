@@ -2,6 +2,11 @@ const departmentList = document.querySelector("#departmentList");
 const addBtn = document.querySelector("#add-btn");
 const departmentName = document.querySelector("#departmentName");
 
+const editModal = document.querySelector("#editModal");
+const editForm = document.querySelector("#editForm");
+const editDepartmentName = document.querySelector("#editDepartmentName");
+const closeModalBtn = document.querySelector(".close");
+
 function getAllDepartments() {
     try {
         fetch("http://localhost:3000/api/departements")
@@ -55,7 +60,7 @@ async function deleteDepartment(departmentId) {
         );
 
         if (response.ok) {
-            alert("Département supprimé avec succès !");
+            Toast.success("Département supprimé avec succès !");
             getAllDepartments(); // Rafraîchir la liste des départements
         } else {
             const error = await response.json();
@@ -81,6 +86,7 @@ function addNewDepartment({ name }) {
             .then((result) => {
                 console.log({ result });
                 getAllDepartments();
+                Toast.success("Nouveau département ajouté avec succès");
             });
     } catch (error) {
         console.error(`Erreur lors de l'ajout d département: ${error}`);
@@ -88,17 +94,29 @@ function addNewDepartment({ name }) {
 }
 
 function openEditModal(department) {
-    const newName = prompt(
-        "Entrez le nouveau nom du département :",
-        department.name
-    );
+    // Pré-remplir le champ avec le nom actuel du département
+    editDepartmentName.value = department.name;
 
-    if (!newName || newName.trim() === "") {
-        alert("Le nom ne peut pas être vide !");
-        return;
-    }
+    // Afficher le modal
+    editModal.style.display = "block";
 
-    editDepartment(department.id, newName);
+    // Gérer la soumission du formulaire
+    editForm.onsubmit = async function (e) {
+        e.preventDefault();
+
+        const newName = editDepartmentName.value.trim();
+
+        if (!newName) {
+            Toast.error("Le nom ne peut pas être vide !");
+            return;
+        }
+
+        // Appeler la fonction pour modifier le département
+        await editDepartment(department.id, newName);
+
+        // Fermer le modal après la modification
+        editModal.style.display = "none";
+    };
 }
 
 async function editDepartment(departmentId, newName) {
@@ -115,7 +133,7 @@ async function editDepartment(departmentId, newName) {
         );
 
         if (response.ok) {
-            alert("Département modifié avec succès !");
+            Toast.success("Département modifié avec succès !");
             getAllDepartments(); // Rafraîchir la liste des départements
         } else {
             console.error("Erreur lors de la modification du département");
@@ -125,13 +143,25 @@ async function editDepartment(departmentId, newName) {
     }
 }
 
+// Fermer le modal en cliquant sur le bouton "close"
+closeModalBtn.onclick = function () {
+    editModal.style.display = "none";
+};
+
+// Fermer le modal en cliquant en dehors de la fenêtre
+window.onclick = function (event) {
+    if (event.target === editModal) {
+        editModal.style.display = "none";
+    }
+};
+
 addBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
     const department = departmentName.value.trim();
 
     if (!department) {
-        alert("Vous devez entrer un département");
+        Toast.error("Vous devez entrer un département");
         return;
     }
 

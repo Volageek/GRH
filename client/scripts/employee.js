@@ -92,7 +92,7 @@ async function deleteEmployee(employeeId) {
         );
 
         if (response.ok) {
-            alert("Employé supprimé avec succès !");
+            Toast.error("Employé supprimé avec succès !");
             await getAllEmployees(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de la suppression de l'employé");
@@ -138,13 +138,15 @@ function addNewEmployee({ name, departement_id }) {
                 const deleteBtn = document.createElement("button");
                 deleteBtn.innerHTML = "Supprimer";
                 deleteBtn.classList.add("delete-btn");
-                deleteBtn.addEventListener("click", () =>
-                    deleteEmployee(result.result.id)
-                );
+                deleteBtn.addEventListener("click", () => {
+                    deleteEmployee(result.result.id);
+                });
 
                 div.appendChild(p);
                 div.appendChild(editBtn);
                 div.appendChild(deleteBtn);
+
+                Toast.success("Nouvel employé ajouté.");
 
                 employeeList.appendChild(div);
             });
@@ -159,7 +161,7 @@ addBtn.addEventListener("click", async function (e) {
     const employee = employeeName.value.trim();
 
     if (!employee) {
-        alert("Vous devez entrer un employé");
+        Toast.error("Vous devez entrer un employé");
         return;
     }
 
@@ -222,7 +224,7 @@ function openEditModal(employee) {
         const newDepartmentId = editDepartment.value;
 
         if (!newName) {
-            alert("Le nom ne peut pas être vide !");
+            Toast.error("Le nom ne peut pas être vide !");
             return;
         }
 
@@ -260,7 +262,7 @@ async function editEmployee(employee) {
         );
 
         if (response.ok) {
-            alert("Employé modifié avec succès !");
+            Toast.success("Employé modifié avec succès !");
             await getAllEmployees(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de la modification de l'employé");

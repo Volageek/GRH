@@ -79,7 +79,7 @@ async function addLeave(employeeId, startDate, endDate) {
         });
 
         if (response.ok) {
-            alert("Congé ajouté avec succès !");
+            Toast.success("Congé ajouté avec succès !");
             getAllLeaves(); // Rafraîchir la liste des congés
             getAllEmployees(); // Rafraîchir la liste des employés
         } else {
@@ -108,7 +108,7 @@ async function updateLeave(leaveId, startDate, endDate) {
         );
 
         if (response.ok) {
-            alert("Congé mis à jour avec succès !");
+            Toast.success("Congé mis à jour avec succès !");
             getAllLeaves(); // Rafraîchir la liste des congés
             getAllEmployees(); // Rafraîchir la liste des employés
         } else {
@@ -130,7 +130,7 @@ async function deleteLeave(leaveId) {
         );
 
         if (response.ok) {
-            alert("Congé supprimé avec succès !");
+            Toast.success("Congé supprimé avec succès !");
             getAllLeaves(); // Rafraîchir la liste des congés
             getAllEmployees(); // Rafraîchir la liste des employés
         } else {
@@ -170,7 +170,7 @@ async function openUpdateModal(leave) {
         const updatedEndDate = endDateInput.value;
 
         if (!updatedStartDate || !updatedEndDate) {
-            alert("Veuillez remplir tous les champs.");
+            Toast.error("Veuillez remplir tous les champs.");
             return;
         }
 
@@ -190,7 +190,7 @@ function addLeaveHandler(e) {
     const endDate = endDateInput.value;
 
     if (!employeeId || !startDate || !endDate) {
-        alert("Veuillez remplir tous les champs.");
+        Toast.error("Veuillez remplir tous les champs.");
         return;
     }
 

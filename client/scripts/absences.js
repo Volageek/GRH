@@ -89,7 +89,7 @@ async function addAbsence(employeeId, date, reason) {
         });
 
         if (response.ok) {
-            alert("Absence ajoutée avec succès !");
+            Toast.success("Absence ajoutée avec succès !");
             getAllAbsences(); // Rafraîchir la liste des absences
         } else {
             console.error("Erreur lors de l'ajout de l'absence");
@@ -117,7 +117,7 @@ async function updateAbsence(absenceId, date, reason) {
         );
 
         if (response.ok) {
-            alert("Absence mise à jour avec succès !");
+            Toast.success("Absence mise à jour avec succès !");
             getAllAbsences(); // Rafraîchir la liste des absences
         } else {
             console.error("Erreur lors de la mise à jour de l'absence");
@@ -138,7 +138,7 @@ async function deleteAbsence(absenceId) {
         );
 
         if (response.ok) {
-            alert("Absence supprimée avec succès !");
+            Toast.success("Absence supprimée avec succès !");
             getAllAbsences(); // Rafraîchir la liste des absences
         } else {
             console.error("Erreur lors de la suppression de l'absence");
@@ -166,7 +166,7 @@ function openUpdateModal(absence) {
         const updatedReason = reasonInput.value;
 
         if (!updatedDate || !updatedReason) {
-            alert("Veuillez remplir tous les champs.");
+            Toast.error("Veuillez remplir tous les champs.");
             return;
         }
 
@@ -185,7 +185,7 @@ function addAbsenceHandler(e) {
     const reason = reasonInput.value;
 
     if (!employeeId || !date || !reason) {
-        alert("Veuillez remplir tous les champs.");
+        Toast.error("Veuillez remplir tous les champs.");
         return;
     }
 

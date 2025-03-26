@@ -64,7 +64,7 @@ async function updateEmployeeSalary(employeeId, salary) {
         );
 
         if (response.ok) {
-            alert("Salaire mis à jour avec succès !");
+            Toast.success("Salaire mis à jour avec succès !");
             getAllEmployeesWithSalaries(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de la mise à jour du salaire");
@@ -85,7 +85,7 @@ async function deleteEmployeeSalary(employeeId) {
         );
 
         if (response.ok) {
-            alert("Salaire supprimé avec succès !");
+            Toast.success("Salaire supprimé avec succès !");
             getAllEmployeesWithSalaries(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de la suppression du salaire");
@@ -103,7 +103,9 @@ salaryForm.addEventListener("submit", (e) => {
     const salary = parseFloat(salaryInput.value);
 
     if (!employeeId || isNaN(salary) || salary <= 0) {
-        alert("Veuillez sélectionner un employé et entrer un salaire valide.");
+        Toast.error(
+            "Veuillez sélectionner un employé et entrer un salaire valide."
+        );
         return;
     }
 

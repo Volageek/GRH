@@ -6,11 +6,7 @@
         <title>Employés - Gestion RH</title>
         <link rel="stylesheet" href="styles/main.css" />
         <link rel="stylesheet" href="styles/style.css" />
-        <!-- Toastr CSS -->
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-        />
+        <link rel="stylesheet" href="styles/toast.css" />
         <style>
             .employee-item {
                 display: grid;
@@ -26,6 +22,9 @@
             @media screen and (max-width: 768px) {
                 .employee-item {
                     gap: 1rem;
+                }
+                .modal-content {
+                    width: 75% !important;
                 }
             }
         </style>
@@ -88,9 +87,11 @@
                 </div>
             </div>
         </main>
-        <!-- Toastr JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+        <div id="toast-container"></div>
+
         <!-- <script src="scripts/main.js"></script> -->
+        <script src="scripts/toast.js"></script>
         <script type="module" src="scripts/employee.js"></script>
     </body>
 </html>
