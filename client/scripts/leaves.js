@@ -17,7 +17,9 @@ async function getAllLeaves() {
             div.classList.add("leave-item");
 
             const p = document.createElement("p");
-            p.innerHTML = `${leave.employee_name} : Du ${leave.start_date} au ${leave.end_date}`;
+            p.innerHTML = `${leave.employee_name} : Du ${formatDateToLocal(
+                leave.start_date
+            )} au ${formatDateToLocal(leave.end_date)}`;
 
             // Bouton pour mettre à jour le congé
             const updateBtn = document.createElement("button");
@@ -52,8 +54,8 @@ async function getAllEmployees() {
 
         employees.forEach((employee) => {
             const option = document.createElement("option");
-            option.value = employee.id;
-            option.textContent = employee.name;
+            option.value = employee.id; // L'ID de l'employé
+            option.textContent = employee.name; // Le nom de l'employé
             employeeSelect.appendChild(option);
         });
     } catch (error) {
@@ -79,6 +81,7 @@ async function addLeave(employeeId, startDate, endDate) {
         if (response.ok) {
             alert("Congé ajouté avec succès !");
             getAllLeaves(); // Rafraîchir la liste des congés
+            getAllEmployees(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de l'ajout du congé");
         }
@@ -107,6 +110,7 @@ async function updateLeave(leaveId, startDate, endDate) {
         if (response.ok) {
             alert("Congé mis à jour avec succès !");
             getAllLeaves(); // Rafraîchir la liste des congés
+            getAllEmployees(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de la mise à jour du congé");
         }
@@ -128,6 +132,7 @@ async function deleteLeave(leaveId) {
         if (response.ok) {
             alert("Congé supprimé avec succès !");
             getAllLeaves(); // Rafraîchir la liste des congés
+            getAllEmployees(); // Rafraîchir la liste des employés
         } else {
             console.error("Erreur lors de la suppression du congé");
         }
@@ -136,11 +141,21 @@ async function deleteLeave(leaveId) {
     }
 }
 
-// Fonction pour ouvrir le formulaire de mise à jour
-function openUpdateModal(leave) {
-    // Convertir les dates au format "yyyy-MM-dd"
-    const startDate = new Date(leave.start_date).toISOString().split("T")[0];
-    const endDate = new Date(leave.end_date).toISOString().split("T")[0];
+function formatDateToLocal(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Les mois commencent à 0
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+async function openUpdateModal(leave) {
+    // Recharger la liste des employés pour s'assurer qu'elle est à jour
+    await getAllEmployees();
+
+    // Convertir les dates au format "yyyy-MM-dd" en utilisant la méthode locale
+    const startDate = formatDateToLocal(leave.start_date);
+    const endDate = formatDateToLocal(leave.end_date);
 
     // Pré-remplir les champs avec les données actuelles du congé
     employeeSelect.value = leave.employee_id;

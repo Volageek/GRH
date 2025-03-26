@@ -4,6 +4,14 @@ const employeeSelect = document.querySelector("#employeeSelect");
 const dateInput = document.querySelector("#dateInput");
 const reasonInput = document.querySelector("#reasonInput");
 
+function formatDateToLocal(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Les mois commencent à 0
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
 // Fonction pour récupérer les absences
 async function getAllAbsences() {
     try {
@@ -17,7 +25,9 @@ async function getAllAbsences() {
             div.classList.add("absence-item");
 
             const p = document.createElement("p");
-            p.innerHTML = `${absence.employee_name} : ${absence.date} - ${absence.reason}`;
+            p.innerHTML = `${absence.employee_name} : ${formatDateToLocal(
+                absence.date
+            )} - ${absence.reason}`;
 
             // Bouton pour mettre à jour l'absence
             const updateBtn = document.createElement("button");
@@ -141,7 +151,7 @@ async function deleteAbsence(absenceId) {
 // Fonction pour ouvrir le formulaire de mise à jour
 function openUpdateModal(absence) {
     // Convertir la date au format "yyyy-MM-dd"
-    const formattedDate = new Date(absence.date).toISOString().split("T")[0];
+    const formattedDate = formatDateToLocal(absence.date);
 
     // Pré-remplir les champs avec les données actuelles de l'absence
     employeeSelect.value = absence.employee_id;

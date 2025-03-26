@@ -11,6 +11,24 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
         />
+        <style>
+            .employee-item {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                align-items: center;
+                gap: 3rem;
+            }
+            .edit-btn,
+            .delete-btn {
+                margin-bottom: 0 !important;
+            }
+
+            @media screen and (max-width: 768px) {
+                .employee-item {
+                    gap: 1rem;
+                }
+            }
+        </style>
     </head>
     <body>
         <header>

@@ -10,6 +10,36 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
         />
+        <style>
+            #dateInput,
+            #reasonInput {
+                width: 94%;
+            }
+            .absence-item {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3rem;
+                align-items: center;
+
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
+            .update-btn,
+            .delete-btn {
+                margin-bottom: 0;
+                height: 50px !important;
+            }
+
+            @media screen and (max-width: 768px) {
+                .absence-item {
+                    grid-template-rows: repeat(3, 1fr);
+                    grid-template-columns: 1fr;
+                    gap: 1rem;
+                }
+            }
+        </style>
     </head>
     <body>
         <header>

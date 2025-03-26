@@ -31,7 +31,11 @@ async function getAllEmployeesWithSalaries() {
             );
 
             div.appendChild(p);
-            if (employee.salary) div.appendChild(deleteBtn);
+            if (employee.salary) {
+                div.appendChild(deleteBtn);
+                div.style.display = "grid";
+                div.style.gridTemplateColumns = "1fr 1fr";
+            }
             employeeList.appendChild(div);
 
             // Ajouter l'employé au menu déroulant
