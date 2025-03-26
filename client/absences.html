@@ -1,52 +1,56 @@
 ﻿<!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absences - Gestion RH</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-</head>
-<body>
-    <header>
-        <h1>Gestion des Absences</h1>
-        <nav>
-            <ul>
-                <li><a href="home.html">Accueil</a></li>
-                <li><a href="employees.html">Employés</a></li>
-                <li><a href="departments.html">Départements</a></li>
-                <li><a href="salaries.html">Salaires</a></li>
-                <li><a href="leaves.html">Congés</a></li>
-                <li><a href="absences.html">Absences</a></li>
-                <li><a href="dashboard.html">Tableau de Bord</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class="container">
-            <div class="form-column">
-                <h2>Enregistrer une Absence</h2>
-                <form id="absenceForm">
-                    <label for="employee">Employé :</label>
-                    <select id="employee" name="employee" required>
-                        <!-- Les options seront ajoutées dynamiquement -->
-                    </select>
-                    <label for="date">Date :</label>
-                    <input type="date" id="date" name="date" required>
-                    <label for="reason">Raison :</label>
-                    <input type="text" id="reason" name="reason" required>
-                    <button type="submit">Ajouter</button>
-                </form>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Absences - Gestion RH</title>
+        <link rel="stylesheet" href="styles/main.css" />
+        <!-- Toastr CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        />
+    </head>
+    <body>
+        <header>
+            <h1>Gestion des Absences</h1>
+            <nav>
+                <ul>
+                    <li><a href="home.html">Accueil</a></li>
+                    <li><a href="employees.html">Employés</a></li>
+                    <li><a href="departments.html">Départements</a></li>
+                    <li><a href="salaries.html">Salaires</a></li>
+                    <li><a href="leaves.html">Congés</a></li>
+                    <li><a href="absences.html">Absences</a></li>
+                    <li><a href="dashboard.html">Tableau de Bord</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="container">
+                <div id="absences">
+                    <h2>Liste des absences</h2>
+                    <div id="absenceList"></div>
+
+                    <h3>Ajouter une absence</h3>
+                    <form id="absenceForm">
+                        <label for="employeeSelect">Employé :</label>
+                        <select id="employeeSelect" required></select>
+
+                        <label for="dateInput">Date :</label>
+                        <input type="date" id="dateInput" required />
+
+                        <label for="reasonInput">Raison :</label>
+                        <input type="text" id="reasonInput" required />
+
+                        <button type="submit">Ajouter l'absence</button>
+                    </form>
+                </div>
             </div>
-            <div class="table-column">
-                <h2>Liste des Absences</h2>
-                <ul id="absenceList"></ul>
-            </div>
-        </div>
-    </main>
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="scripts/main.js"></script>
-</body>
+        </main>
+        <!-- Toastr JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="scripts/main.js"></script>
+        <script src="scripts/absences.js"></script>
+    </body>
 </html>
