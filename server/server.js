@@ -439,6 +439,72 @@ app.delete("/api/absences/:id", async (req, res) => {
     }
 });
 
+// GET /api/stats/employees
+app.get("/api/stats/employees", async (req, res) => {
+    try {
+        const [rows] = await connection.query(
+            "SELECT COUNT(*) AS count FROM employes"
+        );
+        res.json({ count: rows[0].count });
+    } catch (error) {
+        console.error(
+            "Erreur lors de la récupération du nombre d'employés :",
+            error
+        );
+        res.status(500).json({ error: "Erreur interne du serveur." });
+    }
+});
+
+// GET /api/stats/departments
+app.get("/api/stats/departments", async (req, res) => {
+    try {
+        const [rows] = await connection.query(
+            "SELECT COUNT(*) AS count FROM departements"
+        );
+        res.json({ count: rows[0].count });
+    } catch (error) {
+        console.error(
+            "Erreur lors de la récupération du nombre de départements :",
+            error
+        );
+        res.status(500).json({ error: "Erreur interne du serveur." });
+    }
+});
+
+// GET /api/stats/leaves
+app.get("/api/stats/leaves", async (req, res) => {
+    try {
+        const [rows] = await connection.query(`
+            SELECT COUNT(*) AS count 
+            FROM conges 
+            WHERE start_date <= CURDATE() AND end_date >= CURDATE()
+        `);
+        res.json({ count: rows[0].count });
+    } catch (error) {
+        console.error(
+            "Erreur lors de la récupération du nombre de congés en cours :",
+            error
+        );
+        res.status(500).json({ error: "Erreur interne du serveur." });
+    }
+});
+
+// GET /api/stats/absences
+app.get("/api/stats/absences", async (req, res) => {
+    try {
+        const [rows] = await connection.query(
+            "SELECT COUNT(*) AS count FROM absences"
+        );
+        res.json({ count: rows[0].count });
+    } catch (error) {
+        console.error(
+            "Erreur lors de la récupération du nombre d'absences :",
+            error
+        );
+        res.status(500).json({ error: "Erreur interne du serveur." });
+    }
+});
+
 // Démarrer le serveur
 app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
