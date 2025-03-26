@@ -37,11 +37,11 @@ mysql
 
 // Routes pour les pages HTML
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(path.join(__dirname, "public", "client/index.html"));
 });
 
 app.get("/home", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "home.html"));
+    res.sendFile(path.join(__dirname, "public", "client/home.html"));
 });
 
 // Routes pour les employés
