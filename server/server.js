@@ -302,47 +302,69 @@ app.delete("/api/salaires/:employee_id", async (req, res) => {
 // Routes pour les congés
 app.post("/api/conges", async (req, res) => {
     const { employee_id, start_date, end_date } = req.body;
+
+    if (!employee_id || !start_date || !end_date) {
+        return res.status(400).send({ error: "Tous les champs sont requis." });
+    }
+
     try {
-        const [result] = await connection.execute(
+        await connection.query(
             "INSERT INTO conges (employee_id, start_date, end_date) VALUES (?, ?, ?)",
             [employee_id, start_date, end_date]
         );
-        res.json({ id: result.insertId, employee_id, start_date, end_date });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(201).send({ message: "Congé ajouté avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du congé :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
+// GET /api/conges
 app.get("/api/conges", async (req, res) => {
     try {
-        const [rows] = await connection.query("SELECT * FROM conges");
+        const [rows] = await connection.query(`
+            SELECT l.id, l.start_date, l.end_date, e.name AS employee_name
+            FROM conges l
+            JOIN employes e ON l.employee_id = e.id
+        `);
         res.json(rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des congés :", error);
+        res.status(500).json({ error: "Erreur interne du serveur." });
     }
 });
 
+// PUT /api/conges/:id
 app.put("/api/conges/:id", async (req, res) => {
     const { id } = req.params;
     const { start_date, end_date } = req.body;
+
+    if (!start_date || !end_date) {
+        return res.status(400).send({ error: "Les dates sont requises." });
+    }
+
     try {
-        const [result] = await connection.query(
+        await connection.query(
             "UPDATE conges SET start_date = ?, end_date = ? WHERE id = ?",
             [start_date, end_date, id]
         );
-        res.json({ id, start_date, end_date });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(200).send({ message: "Congé mis à jour avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du congé :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
+// DELETE /api/conges/:id
 app.delete("/api/conges/:id", async (req, res) => {
     const { id } = req.params;
+
     try {
         await connection.query("DELETE FROM conges WHERE id = ?", [id]);
-        res.json({ message: "Congé supprimé avec succès" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(200).send({ message: "Congé supprimé avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du congé :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
