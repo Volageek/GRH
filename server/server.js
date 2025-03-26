@@ -78,15 +78,37 @@ app.get("/api/employes", async (req, res) => {
 
 app.put("/api/employes/:id", async (req, res) => {
     const { id } = req.params;
-    const { name, department_id } = req.body;
+    const { name, departement_id } = req.body;
+
+    if (!name || !departement_id) {
+        return res
+            .status(400)
+            .send({ error: "Le nom et le département sont requis." });
+    }
+
     try {
-        const [result] = await connection.query(
-            "UPDATE employes SET name = ?, department_id = ? WHERE id = ?",
-            [name, department_id, id]
+        // Exemple de requête SQL pour mettre à jour un employé
+        const resultUpdate = await connection.query(
+            "UPDATE employes SET name = ?, departement_id = ? WHERE id = ?",
+            [name, departement_id, id]
         );
-        res.json({ id, name, department_id });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+        const result = await connection.query(
+            "SELECT * FROM employes WHERE id = ?",
+            [id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).send({ error: "Employé non trouvé." });
+        }
+
+        res.status(200).send({
+            message: "Employé modifié avec succès",
+            employee: result[0],
+        });
+    } catch (error) {
+        console.error("Erreur lors de la modification de l'employé :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
