@@ -371,47 +371,71 @@ app.delete("/api/conges/:id", async (req, res) => {
 // Routes pour les absences
 app.post("/api/absences", async (req, res) => {
     const { employee_id, date, reason } = req.body;
+
+    if (!employee_id || !date || !reason) {
+        return res.status(400).send({ error: "Tous les champs sont requis." });
+    }
+
     try {
-        const [result] = await connection.execute(
+        await connection.query(
             "INSERT INTO absences (employee_id, date, reason) VALUES (?, ?, ?)",
             [employee_id, date, reason]
         );
-        res.json({ id: result.insertId, employee_id, date, reason });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(201).send({ message: "Absence ajoutée avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de l'absence :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
+// GET /api/absences
 app.get("/api/absences", async (req, res) => {
     try {
-        const [rows] = await connection.query("SELECT * FROM absences");
+        const [rows] = await connection.query(`
+            SELECT a.id, a.date, a.reason, e.name AS employee_name, e.id AS employee_id
+            FROM absences a
+            JOIN employes e ON a.employee_id = e.id
+        `);
         res.json(rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des absences :", error);
+        res.status(500).json({ error: "Erreur interne du serveur." });
     }
 });
 
+// PUT /api/absences/:id
 app.put("/api/absences/:id", async (req, res) => {
     const { id } = req.params;
     const { date, reason } = req.body;
+
+    if (!date || !reason) {
+        return res
+            .status(400)
+            .send({ error: "Les champs date et raison sont requis." });
+    }
+
     try {
-        const [result] = await connection.query(
+        await connection.query(
             "UPDATE absences SET date = ?, reason = ? WHERE id = ?",
             [date, reason, id]
         );
-        res.json({ id, date, reason });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(200).send({ message: "Absence mise à jour avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'absence :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
+// DELETE /api/absences/:id
 app.delete("/api/absences/:id", async (req, res) => {
     const { id } = req.params;
+
     try {
         await connection.query("DELETE FROM absences WHERE id = ?", [id]);
-        res.json({ message: "Absence supprimée avec succès" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(200).send({ message: "Absence supprimée avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la suppression de l'absence :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
