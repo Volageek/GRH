@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Employés - Gestion RH</title>
         <link rel="stylesheet" href="styles/main.css" />
+        <link rel="stylesheet" href="styles/style.css" />
         <!-- Toastr CSS -->
         <link
             rel="stylesheet"
@@ -45,6 +46,27 @@
                 <div class="table-column">
                     <h2>Liste des Employés</h2>
                     <ul id="employeeList"></ul>
+                </div>
+            </div>
+            <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Modifier l'employé</h2>
+                    <form id="editForm">
+                        <label for="editName">Nom :</label>
+                        <input
+                            type="text"
+                            id="editName"
+                            name="editName"
+                            required
+                        />
+                        <label for="editDepartment">Département :</label>
+                        <select
+                            id="editDepartment"
+                            name="editDepartment"
+                        ></select>
+                        <button type="submit">Enregistrer</button>
+                    </form>
                 </div>
             </div>
         </main>
