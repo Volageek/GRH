@@ -69,9 +69,14 @@ app.post("/api/employes", async (req, res) => {
 
 app.get("/api/employes", async (req, res) => {
     try {
-        const [rows] = await connection.query("SELECT * FROM employes");
+        const [rows] = await connection.query(`
+            SELECT e.id, e.name, e.department_id, s.amount AS salary
+            FROM employes e
+            LEFT JOIN salaires s ON e.id = s.employee_id
+        `);
         res.json(rows);
     } catch (err) {
+        console.error("Erreur lors de la récupération des employés :", err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -119,6 +124,27 @@ app.delete("/api/employes/:id", async (req, res) => {
         res.json({ message: "Employé supprimé avec succès" });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// PUT /api/employes/:id/salaire
+app.put("/api/employes/:id/salaire", async (req, res) => {
+    const { id } = req.params;
+    const { salary } = req.body;
+
+    if (!salary || salary <= 0) {
+        return res.status(400).send({ error: "Salaire invalide." });
+    }
+
+    try {
+        await connection.query("UPDATE employees SET salary = ? WHERE id = ?", [
+            salary,
+            id,
+        ]);
+        res.status(200).send({ message: "Salaire mis à jour avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du salaire :", error);
+        res.status(500).send({ error: "Erreur interne du serveur" });
     }
 });
 
@@ -222,27 +248,54 @@ app.get("/api/salaires", async (req, res) => {
     }
 });
 
-app.put("/api/salaires/:id", async (req, res) => {
-    const { id } = req.params;
+app.put("/api/salaires/:employee_id", async (req, res) => {
+    const { employee_id } = req.params;
     const { amount } = req.body;
+
+    if (!amount || amount <= 0) {
+        return res.status(400).send({ error: "Salaire invalide." });
+    }
+
     try {
-        const [result] = await connection.query(
-            "UPDATE salaires SET amount = ? WHERE id = ?",
-            [amount, id]
+        // Vérifier si un salaire existe déjà pour cet employé
+        const [rows] = await connection.query(
+            "SELECT * FROM salaires WHERE employee_id = ?",
+            [employee_id]
         );
-        res.json({ id, amount });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+        if (rows.length > 0) {
+            // Mettre à jour le salaire existant
+            await connection.query(
+                "UPDATE salaires SET amount = ? WHERE employee_id = ?",
+                [amount, employee_id]
+            );
+        } else {
+            // Ajouter un nouveau salaire
+            await connection.query(
+                "INSERT INTO salaires (employee_id, amount) VALUES (?, ?)",
+                [employee_id, amount]
+            );
+        }
+
+        res.status(200).send({ message: "Salaire mis à jour avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du salaire :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
-app.delete("/api/salaires/:id", async (req, res) => {
-    const { id } = req.params;
+// DELETE /api/salaires/:employee_id
+app.delete("/api/salaires/:employee_id", async (req, res) => {
+    const { employee_id } = req.params;
+
     try {
-        await connection.query("DELETE FROM salaires WHERE id = ?", [id]);
-        res.json({ message: "Salaire supprimé avec succès" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        await connection.query("DELETE FROM salaires WHERE employee_id = ?", [
+            employee_id,
+        ]);
+        res.status(200).send({ message: "Salaire supprimé avec succès." });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du salaire :", error);
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
