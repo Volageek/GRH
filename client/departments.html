@@ -5,6 +5,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Départements - Gestion RH</title>
         <link rel="stylesheet" href="styles/main.css" />
+        <style>
+            input#departmentName {
+                width: 95%;
+            }
+
+            .department-item {
+                /* background-color: green;*/
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                align-items: center;
+                gap: 3rem;
+            }
+            .edit-btn,
+            .delete-btn {
+                margin-bottom: 0 !important;
+            }
+
+            @media screen and (max-width: 768px) {
+                .department-item {
+                    gap: 1rem;
+                }
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -22,7 +45,6 @@
             </nav>
         </header>
         <main>
-            <h2>Liste des Départements</h2>
             <form id="departmentForm">
                 <label for="departmentName">Nom du département :</label>
                 <input
@@ -33,6 +55,7 @@
                 />
                 <button id="add-btn" type="submit">Ajouter</button>
             </form>
+            <h2>Liste des Départements</h2>
             <ul id="departmentList"></ul>
         </main>
         <script src="scripts/departments.js"></script>
