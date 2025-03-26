@@ -3,40 +3,37 @@ const addBtn = document.querySelector("#add-btn");
 const employeeName = document.querySelector("#name");
 
 const departmentList = document.querySelector("#departments");
-let departmentId = 1;
 
-function addDepartmentOption(department) {
-    const option = document.createElement("option");
-    option.value = department.name;
-    option.innerHTML = department.name;
-    option.addEventListener("click", function () {
-        departmentId = option.id;
-    });
-
-    departmentList.appendChild(option);
-}
+const state = {
+    departmentId: null,
+    employeeName: "",
+};
 
 async function getAllDepartments() {
     try {
-        const response = await fetch("http://localhost:3000/api/departements");
-        const result = await response.json();
-
-        return result;
-
-        /*  fetch("http://localhost:3000/api/departements")
+        fetch("http://localhost:3000/api/departements")
             .then((response) => response.json())
             .then((result) => {
                 result.forEach((department) => {
                     const option = document.createElement("option");
-                    option.value = department.name;
+                    option.value = department.id; // Utiliser l'id comme valeur
                     option.innerHTML = department.name;
-                    option.addEventListener("click", function () {
-                        departmentId = option.id;
-                    });
 
-                    departments.appendChild(option);
+                    departmentList.appendChild(option);
                 });
-            }); */
+
+                departmentList.addEventListener("change", function () {
+                    const selectedOption =
+                        departmentList.options[departmentList.selectedIndex];
+                    state.departmentId = selectedOption.value; // Mettre à jour l'état
+                    console.log(state.departmentId); // Afficher l'état mis à jour
+                });
+            })
+            .catch((error) => {
+                console.error(
+                    `Erreur lors de la récupération des départements: ${error}`
+                );
+            });
     } catch (error) {
         console.error(
             `Erreur lors de la récupération des départements: ${error}`
@@ -87,34 +84,35 @@ function addNewEmployee({ name, departement_id }) {
     }
 }
 
+addBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const employee = employeeName.value.trim();
+
+    if (!employee) {
+        alert("Vous devez entrer un employé");
+        return;
+    }
+
+    await addNewEmployee({
+        name: employee,
+        departement_id: state.departmentId,
+    });
+
+    // Réinitialiser le champ de saisie
+    employeeName.value = "";
+
+    // Réinitialiser le select à la première option
+    departmentList.selectedIndex = 0;
+
+    // Mettre à jour l'état local avec la valeur de la première option
+    state.departmentId = departmentList.options[0].value;
+
+    // Afficher l'état mis à jour dans la console (facultatif)
+    console.log("État réinitialisé :", state.departmentId);
+});
+
 document.addEventListener("DOMContentLoaded", async function () {
-    getAllEmployees();
-
-    let departments = await getAllDepartments();
-    console.log({ departments });
-    let departmentId = 1;
-
-    departments.forEach((dep) => {
-        const option = document.createElement("option");
-        option.value = dep.name;
-        option.innerHTML = dep.name;
-        option.addEventListener("click", function () {
-            departmentId = dep.id;
-        });
-
-        departmentList.appendChild(option);
-    });
-
-    addBtn.addEventListener("click", async function (e) {
-        e.preventDefault();
-
-        const employee = employeeName.value.trim();
-
-        if (!employee) {
-            alert("Vous devez entrer un employé");
-            return;
-        }
-
-        await addNewEmployee({ name: employee, departement_id: departmentId });
-    });
+    await getAllEmployees();
+    await getAllDepartments();
 });
