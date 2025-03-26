@@ -19,6 +19,14 @@ CREATE TABLE employes (
     FOREIGN KEY (department_id) REFERENCES departements(id)
 );
 
+ALTER TABLE employes
+DROP FOREIGN KEY employes_ibfk_1;
+
+ALTER TABLE employes
+ADD CONSTRAINT employes_ibfk_1
+FOREIGN KEY (departement_id) REFERENCES departements(id)
+ON DELETE CASCADE;
+
 -- Table des salaires
 CREATE TABLE salaires (
     id INT AUTO_INCREMENT PRIMARY KEY,

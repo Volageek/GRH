@@ -49,7 +49,7 @@ app.post("/api/employes", async (req, res) => {
     const { name, departement_id } = req.body;
     try {
         const [result] = await connection.execute(
-            "INSERT INTO employes (name, departement_id) VALUES (?, ?)",
+            "INSERT INTO employes (name, department_id) VALUES (?, ?)",
             [name, departement_id]
         );
 
@@ -89,7 +89,7 @@ app.put("/api/employes/:id", async (req, res) => {
     try {
         // Exemple de requête SQL pour mettre à jour un employé
         const resultUpdate = await connection.query(
-            "UPDATE employes SET name = ?, departement_id = ? WHERE id = ?",
+            "UPDATE employes SET name = ?, department_id = ? WHERE id = ?",
             [name, departement_id, id]
         );
 
@@ -174,11 +174,28 @@ app.put("/api/departements/:id", async (req, res) => {
 
 app.delete("/api/departements/:id", async (req, res) => {
     const { id } = req.params;
+
     try {
+        // Vérifier si des employés sont associés au département
+        const [rows] = await connection.query(
+            "SELECT COUNT(*) AS count FROM employes WHERE department_id = ?",
+            [id]
+        );
+        const count = parseInt(rows[0].count, 10);
+
+        if (count > 0) {
+            return res.status(400).send({
+                error: "Impossible de supprimer le département : des employés y sont associés.",
+            });
+        }
+
+        // Supprimer le département
         await connection.query("DELETE FROM departements WHERE id = ?", [id]);
-        res.json({ message: "Département supprimé avec succès" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+        res.status(200).send({ message: "Département supprimé avec succès" });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du département :", error);
+        res.status(500).send({ error: "Erreur interne du serveur" });
     }
 });
 
