@@ -17,15 +17,8 @@ CREATE TABLE employes (
     name VARCHAR(100) NOT NULL,
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES departements(id)
+    ON DELETE CASCADE
 );
-
-ALTER TABLE employes
-DROP FOREIGN KEY employes_ibfk_1;
-
-ALTER TABLE employes
-ADD CONSTRAINT employes_ibfk_1
-FOREIGN KEY (departement_id) REFERENCES departements(id)
-ON DELETE CASCADE;
 
 -- Table des salaires
 CREATE TABLE salaires (
@@ -51,4 +44,5 @@ CREATE TABLE absences (
     date DATE NOT NULL,
     reason VARCHAR(255) NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employes(id)
+    ON DELETE CASCADE
 );

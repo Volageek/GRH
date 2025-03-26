@@ -120,6 +120,15 @@ app.put("/api/employes/:id", async (req, res) => {
 app.delete("/api/employes/:id", async (req, res) => {
     const { id } = req.params;
     try {
+        await connection.query("DELETE FROM salaires WHERE employee_id = ?", [
+            id,
+        ]);
+        await connection.query("DELETE FROM conges WHERE employee_id = ?", [
+            id,
+        ]);
+        await connection.query("DELETE FROM absences WHERE employee_id = ?", [
+            id,
+        ]);
         await connection.query("DELETE FROM employes WHERE id = ?", [id]);
         res.json({ message: "Employé supprimé avec succès" });
     } catch (err) {
@@ -202,26 +211,20 @@ app.delete("/api/departements/:id", async (req, res) => {
     const { id } = req.params;
 
     try {
-        // Vérifier si des employés sont associés au département
-        const [rows] = await connection.query(
-            "SELECT COUNT(*) AS count FROM employes WHERE department_id = ?",
-            [id]
-        );
-        const count = parseInt(rows[0].count, 10);
-
-        if (count > 0) {
-            return res.status(400).send({
-                error: "Impossible de supprimer le département : des employés y sont associés.",
-            });
-        }
+        // Supprimer les employés associés au département
+        await connection.query("DELETE FROM employes WHERE department_id = ?", [
+            id,
+        ]);
 
         // Supprimer le département
         await connection.query("DELETE FROM departements WHERE id = ?", [id]);
 
-        res.status(200).send({ message: "Département supprimé avec succès" });
+        res.status(200).send({
+            message: "Département et employés associés supprimés avec succès",
+        });
     } catch (error) {
         console.error("Erreur lors de la suppression du département :", error);
-        res.status(500).send({ error: "Erreur interne du serveur" });
+        res.status(500).send({ error: "Erreur interne du serveur." });
     }
 });
 
@@ -432,6 +435,7 @@ app.delete("/api/absences/:id", async (req, res) => {
 
     try {
         await connection.query("DELETE FROM absences WHERE id = ?", [id]);
+
         res.status(200).send({ message: "Absence supprimée avec succès." });
     } catch (error) {
         console.error("Erreur lors de la suppression de l'absence :", error);

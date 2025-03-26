@@ -20,6 +20,7 @@ DB_PASSWORD = "";
 DB_NAME = "gestion_rh";
 ```
 
+-   Create a database named: `gestion_rh`
 -   Import the database file in your database: `gestion_rh.sql`
 -   Launch the server: `npm start`
 -   Open `home.html` with `Live Server`
