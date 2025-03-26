@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employés - Gestion RH</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
+<body>
+    <header>
+        <h1>Gestion des Employés</h1>
+        <nav>
+            <ul>
+                <li><a href="home.html">Accueil</a></li>
+                <li><a href="employees.html">Employés</a></li>
+                <li><a href="departments.html">Départements</a></li>
+                <li><a href="salaries.html">Salaires</a></li>
+                <li><a href="leaves.html">Congés</a></li>
+                <li><a href="absences.html">Absences</a></li>
+                <li><a href="dashboard.html">Tableau de Bord</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="form-column">
+                <h2>Ajouter un Employé</h2>
+                <form id="employeeForm">
+                    <label for="name">Nom de l'employé :</label>
+                    <input type="text" id="name" name="name" required>
+                    <button id="add-btn" type="submit">Ajouter</button>
+                </form>
+            </div>
+            <div class="table-column">
+                <h2>Liste des Employés</h2>
+                <ul id="employeeList"></ul>
+            </div>
+        </div>
+    </main>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- <script src="scripts/main.js"></script> -->
+    <script src="scripts/employee.js"></script>
+</body>
+</html>

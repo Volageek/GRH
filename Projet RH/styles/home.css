@@ -1,0 +1,47 @@
+/* Styles pour la page d'accueil */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff; /* Fond blanc */
+  color: #333; /* Texte sombre */
+}
+
+header {
+  background-color: #8B0000; /* Rouge foncé */
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Espace entre les éléments du menu */
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
+}
+
+nav ul li {
+  margin: 5px 0; /* Espace vertical entre les éléments */
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  background-color: #006400; /* Vert foncé */
+  padding: 10px 20px; /* Plus de padding pour un meilleur espacement */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  display: inline-block; /* Permet un meilleur contrôle de l'espacement */
+}
+
+nav ul li a:hover {
+  background-color: #004d00; /* Vert foncé plus sombre au survol */
+}
+
+main {
+  padding: 20px;
+  text-align: center;
+}

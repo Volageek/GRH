@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salaires - Gestion RH</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header>
+        <h1>Gestion des Salaires</h1>
+        <nav>
+            <ul>
+                <li><a href="home.html">Accueil</a></li>
+                <li><a href="employees.html">Employés</a></li>
+                <li><a href="departments.html">Départements</a></li>
+                <li><a href="salaries.html">Salaires</a></li>
+                <li><a href="leaves.html">Congés</a></li>
+                <li><a href="absences.html">Absences</a></li>
+                <li><a href="dashboard.html">Tableau de Bord</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Liste des Salaires</h2>
+        <form id="salaryForm">
+            <label for="employee">Employé :</label>
+            <select id="employee" name="employee" required>
+                <!-- Les options seront ajoutées dynamiquement -->
+            </select>
+            <label for="amount">Montant :</label>
+            <input type="number" id="amount" name="amount" required>
+            <button type="submit">Ajouter</button>
+        </form>
+        <ul id="salaryList"></ul>
+    </main>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
